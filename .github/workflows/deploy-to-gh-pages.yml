@@ -21,7 +21,7 @@ jobs:
       run: |
         cd website
         npm install
-        npm build
+        npm run build
 
     - name: Create Directory Stucture
       run: |
