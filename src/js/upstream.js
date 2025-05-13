@@ -12,8 +12,32 @@ export function load() {
 
   loadAssetInfo(commonVariant, commonJvmVariant, 'upstream', undefined, undefined, undefined, 'adoptopenjdk', buildUpstreamHTML, () => {
     loading.innerHTML = '';
-    errorContainer.innerHTML = `<p>There are no upstream builds yet for ${commonVariant} on the ${commonJvmVariant} JVM.
-      See the <a href='./nightly.html?variant=${commonVariant}&jvmVariant=${commonJvmVariant}'>Nightly builds</a> page.</p>`;
+    if (errorContainer) {
+      errorContainer.innerHTML = ''; // Clear existing content
+
+      const pElement = document.createElement('p');
+      pElement.appendChild(document.createTextNode('There are no upstream builds yet for '));
+
+      const variantSpan = document.createElement('span');
+      variantSpan.textContent = commonVariant;
+      pElement.appendChild(variantSpan);
+
+      pElement.appendChild(document.createTextNode(' on the '));
+
+      const jvmVariantSpan = document.createElement('span');
+      jvmVariantSpan.textContent = commonJvmVariant;
+      pElement.appendChild(jvmVariantSpan);
+
+      pElement.appendChild(document.createTextNode(' JVM. See the '));
+
+      const linkElement = document.createElement('a');
+      linkElement.href = `./nightly.html?variant=${encodeURIComponent(commonVariant)}&jvmVariant=${encodeURIComponent(commonJvmVariant)}`;
+      linkElement.textContent = 'Nightly builds';
+      pElement.appendChild(linkElement);
+
+      pElement.appendChild(document.createTextNode(' page.'));
+      errorContainer.appendChild(pElement);
+    }
   });
 }
 

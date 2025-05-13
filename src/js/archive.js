@@ -14,8 +14,32 @@ export function load() {
     // if there are no releases (beyond the latest one)...
     // report an error, remove the loading dots
     loading.innerHTML = '';
-    errorContainer.innerHTML = `<p>There are no archived releases yet for ${commonVariant} on the ${commonJvmVariant} JVM.
-      See the <a href='./releases.html?variant=${commonVariant}&jvmVariant=${commonJvmVariant}'>Latest release</a> page.</p>`;
+    if (errorContainer) {
+      errorContainer.innerHTML = ''; // Clear existing content
+
+      const pElement = document.createElement('p');
+      pElement.appendChild(document.createTextNode('There are no archived releases yet for '));
+
+      const variantSpan = document.createElement('span');
+      variantSpan.textContent = commonVariant;
+      pElement.appendChild(variantSpan);
+
+      pElement.appendChild(document.createTextNode(' on the '));
+
+      const jvmVariantSpan = document.createElement('span');
+      jvmVariantSpan.textContent = commonJvmVariant;
+      pElement.appendChild(jvmVariantSpan);
+
+      pElement.appendChild(document.createTextNode(' JVM. See the '));
+
+      const linkElement = document.createElement('a');
+      linkElement.href = `./releases.html?variant=${encodeURIComponent(commonVariant)}&jvmVariant=${encodeURIComponent(commonJvmVariant)}`;
+      linkElement.textContent = 'Latest release';
+      pElement.appendChild(linkElement);
+
+      pElement.appendChild(document.createTextNode(' page.'));
+      errorContainer.appendChild(pElement);
+    }
   });
 }
 
