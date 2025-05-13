@@ -1,4 +1,5 @@
-// Import styles
+// Main entry point for Vite
+import './js/entry.js';
 import './scss/main.scss';
 
 // Import JavaScript modules

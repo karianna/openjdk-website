@@ -1,24 +1,23 @@
-import { detectLTS, detectEA, findPlatform, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, setTickLink, variant, jvmVariant } from './common';
+import { detectLTS, detectEA, findPlatform, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, setTickLink, variant as commonVariant, jvmVariant as commonJvmVariant } from './common';
 import moment from 'moment';
 import Handlebars from 'handlebars';
 import $ from 'jquery';
 
 const loading = document.getElementById('loading');
 const errorContainer = document.getElementById('error-container');
-const global = window;
 
 export function load() {
   setRadioSelectors();
   setTickLink();
 
-  loadAssetInfo(variant, jvmVariant, 'ga', undefined, undefined, undefined, 'adoptopenjdk', buildReleasesHTML, () => {
+  loadAssetInfo(commonVariant, commonJvmVariant, 'ga', undefined, undefined, undefined, 'adoptopenjdk', buildReleasesHTML, () => {
     loading.innerHTML = '';
-    errorContainer.innerHTML = `<p>There are no releases yet for ${variant} on the ${jvmVariant} JVM.
-      See the <a href='./nightly.html?variant=${variant}&jvmVariant=${jvmVariant}'>Nightly builds</a> page.</p>`;
+    errorContainer.innerHTML = `<p>There are no releases yet for ${commonVariant} on the ${commonJvmVariant} JVM.
+      See the <a href='./nightly.html?variant=${commonVariant}&jvmVariant=${commonJvmVariant}'>Nightly builds</a> page.</p>`;
   });
 }
 
-function buildReleasesHTML(aReleases) {
+export function buildReleasesHTML(aReleases) {
   const releases = [];
 
   aReleases.forEach(aRelease => {
@@ -85,7 +84,7 @@ function buildReleasesHTML(aReleases) {
   releasesList.className = releasesList.className.replace(/(?:^|\s)hide(?!\S)/g, ' animated fadeIn ');
 }
 
-function setPagination() {
+export function setPagination() {
   const container = document.getElementById('pagination-container');
   const releasesTableBody = document.getElementById('releases-table-body');
 
@@ -99,14 +98,3 @@ function setPagination() {
     container.classList.add('hide');
   }
 }
-
-global.renderChecksum = function (checksum) {
-  const modal = document.getElementById('myModal');
-  document.getElementById('modal-body').innerHTML = checksum;
-  modal.style.display = 'inline';
-};
-
-global.hideChecksum = function () {
-  const modal = document.getElementById('myModal');
-  modal.style.display = 'none';
-};

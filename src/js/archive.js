@@ -1,4 +1,4 @@
-import { findPlatform, detectEA, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, jvmVariant, variant } from './common';
+import { findPlatform, detectEA, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, jvmVariant as commonJvmVariant, variant as commonVariant } from './common';
 import moment from 'moment';
 import Handlebars from 'handlebars';
 import $ from 'jquery';
@@ -10,16 +10,16 @@ const errorContainer = document.getElementById('error-container');
 export function load() {
   setRadioSelectors();
 
-  loadAssetInfo(variant, jvmVariant, 'ga', undefined, undefined, undefined, 'adoptopenjdk', buildArchiveHTML, () => {
+  loadAssetInfo(commonVariant, commonJvmVariant, 'ga', undefined, undefined, undefined, 'adoptopenjdk', buildArchiveHTML, () => {
     // if there are no releases (beyond the latest one)...
     // report an error, remove the loading dots
     loading.innerHTML = '';
-    errorContainer.innerHTML = `<p>There are no archived releases yet for ${variant} on the ${jvmVariant} JVM.
-      See the <a href='./releases.html?variant=${variant}&jvmVariant=${jvmVariant}'>Latest release</a> page.</p>`;
+    errorContainer.innerHTML = `<p>There are no archived releases yet for ${commonVariant} on the ${commonJvmVariant} JVM.
+      See the <a href='./releases.html?variant=${commonVariant}&jvmVariant=${commonJvmVariant}'>Latest release</a> page.</p>`;
   });
 }
 
-function buildArchiveHTML(aReleases) {
+export function buildArchiveHTML(aReleases) {
   const releases = [];
 
   aReleases.forEach(aRelease => {
@@ -28,7 +28,7 @@ function buildArchiveHTML(aReleases) {
     const release = {
       release_name: aRelease.release_name,
       release_link: aRelease.release_link,
-      dashboard_link: `https://dash.adoptopenjdk.net/version.html?version=${variant}`
+      dashboard_link: `https://dash.adoptopenjdk.net/version.html?version=${commonVariant}`
         + `&tag=${encodeURIComponent(aRelease.release_name)}`,
       release_day: publishedAt.format('D'),
       release_month: publishedAt.format('MMMM'),
@@ -91,7 +91,7 @@ function buildArchiveHTML(aReleases) {
   archiveList.className = archiveList.className.replace( /(?:^|\s)hide(?!\S)/g , ' animated fadeIn ' );
 }
 
-function setPagination() {
+export function setPagination() {
   const container = document.getElementById('pagination-container');
   const archiveTableBody = document.getElementById('archive-table-body');
 

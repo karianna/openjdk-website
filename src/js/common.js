@@ -436,18 +436,18 @@ export const setRadioSelectors = () => {
   }
 };
 
-global.renderChecksum = function (checksum) {
+window.renderChecksum = function (checksum) {
   var modal = document.getElementById('myModal');
   document.getElementById('modal-body').innerHTML = checksum;
   modal.style.display = 'inline';
 };
 
-global.hideChecksum = function () {
+window.hideChecksum = function () {
   var modal = document.getElementById('myModal');
   modal.style.display = 'none';
 };
 
-global.showHideReleaseNotes = function (notes_id) {
+window.showHideReleaseNotes = function (notes_id) {
   var notes_div = document.getElementById(notes_id);
   if (notes_div.classList.contains('softHide')) {
     notes_div.classList.remove('softHide');
@@ -456,9 +456,21 @@ global.showHideReleaseNotes = function (notes_id) {
   }
 };
 
-global.copyStringToClipboard = function () {
-  document.getElementById('modal-body').select();
-  document.execCommand('copy');
+window.copyStringToClipboard = function () {
+  const modalBody = document.getElementById('modal-body');
+  if (modalBody && typeof modalBody.select === 'function') {
+    modalBody.select();
+    document.execCommand('copy');
+  } else {
+    // Fallback for elements that are not input/textarea
+    const range = document.createRange();
+    range.selectNodeContents(modalBody);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand('copy');
+    selection.removeAllRanges();
+  }
 };
 
 export { variant, jvmVariant };

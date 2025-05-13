@@ -1,24 +1,23 @@
-import { detectLTS, detectEA, findPlatform, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, setTickLink, variant, jvmVariant } from './common';
+import { detectLTS, detectEA, findPlatform, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, setTickLink, variant as commonVariant, jvmVariant as commonJvmVariant } from './common';
 import moment from 'moment';
 import Handlebars from 'handlebars';
 import $ from 'jquery';
 
 const loading = document.getElementById('loading');
 const errorContainer = document.getElementById('error-container');
-const global = window;
 
 export function load() {
   setRadioSelectors();
   setTickLink();
 
-  loadAssetInfo(variant, jvmVariant, 'upstream', undefined, undefined, undefined, 'adoptopenjdk', buildUpstreamHTML, () => {
+  loadAssetInfo(commonVariant, commonJvmVariant, 'upstream', undefined, undefined, undefined, 'adoptopenjdk', buildUpstreamHTML, () => {
     loading.innerHTML = '';
-    errorContainer.innerHTML = `<p>There are no upstream builds yet for ${variant} on the ${jvmVariant} JVM.
-      See the <a href='./nightly.html?variant=${variant}&jvmVariant=${jvmVariant}'>Nightly builds</a> page.</p>`;
+    errorContainer.innerHTML = `<p>There are no upstream builds yet for ${commonVariant} on the ${commonJvmVariant} JVM.
+      See the <a href='./nightly.html?variant=${commonVariant}&jvmVariant=${commonJvmVariant}'>Nightly builds</a> page.</p>`;
   });
 }
 
-function buildUpstreamHTML(aReleases) {
+export function buildUpstreamHTML(aReleases) {
   const releases = [];
 
   aReleases.forEach(aRelease => {
@@ -85,7 +84,7 @@ function buildUpstreamHTML(aReleases) {
   upstreamList.className = upstreamList.className.replace(/(?:^|\s)hide(?!\S)/g, ' animated fadeIn ');
 }
 
-function setPagination() {
+export function setPagination() {
   const container = document.getElementById('pagination-container');
   const upstreamTableBody = document.getElementById('upstream-table-body');
 
@@ -99,14 +98,3 @@ function setPagination() {
     container.classList.add('hide');
   }
 }
-
-global.renderChecksum = function (checksum) {
-  const modal = document.getElementById('myModal');
-  document.getElementById('modal-body').innerHTML = checksum;
-  modal.style.display = 'inline';
-};
-
-global.hideChecksum = function () {
-  const modal = document.getElementById('myModal');
-  modal.style.display = 'none';
-};

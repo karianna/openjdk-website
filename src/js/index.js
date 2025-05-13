@@ -1,4 +1,4 @@
-import { detectOS, loadLatestAssets, setRadioSelectors } from './common';
+import { detectOS, loadLatestAssets, setRadioSelectors, variant as commonVariant, jvmVariant as commonJvmVariant } from './common';
 
 // set variables for all index page HTML elements that will be used by the JS
 const loading = document.getElementById('loading');
@@ -22,11 +22,11 @@ export function load() {
   }
   dlText.classList.remove('invisible');
 
-  const handleResponse = () => {
-    buildHomepageHTML();
+  const handleResponse = (releases) => { // Modified to accept releases
+    buildHomepageHTML(releases); // Pass releases to buildHomepageHTML
   };
 
-  loadLatestAssets('variant', 'jvmVariant', 'latest', handleResponse, () => {
+  loadLatestAssets(commonVariant, commonJvmVariant, 'latest', handleResponse, () => {
     errorContainer.innerHTML = `<p>There are no releases available for this variant on the JVM.
       Please check our <a href='nightly.html' target='blank'>Nightly Builds</a>.</p>`;
     loading.innerHTML = ''; // remove the loading dots
@@ -42,8 +42,16 @@ function removeRadioButtons() {
   }
 }
 
-function buildHomepageHTML() {
-  const version = 'variant'.replace(/\D/g, '');
+function buildHomepageHTML(releases) { // Modified to accept releases
+  // Use the actual version from the release data if available
+  // Assuming 'releases' is an array and we take the first one,
+  // and it has a version property like 'version_data.semver' or similar.
+  // This part needs to be adjusted based on the actual structure of 'releases'
+  let version = commonVariant.replace(/\D/g, ''); // Fallback to URL variant
+  if (releases && releases.length > 0 && releases[0].version_data && releases[0].version_data.major) {
+    version = releases[0].version_data.major;
+  }
+  
   dlLatest.href = `https://adoptium.net/temurin/releases?version=${version}`;
   dlLatestText.textContent = 'adoptium.net';
   dlVersionText.innerHTML = 'AdoptOpenJDK has moved...';
