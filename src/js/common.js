@@ -2,8 +2,6 @@
 
 import { platforms, installCommands, variants } from '../json/config';
 
-const global = window;
-
 // Enables things like 'lookup["X64_MAC"]'
 const lookup = {};
 platforms.forEach((platform) => (lookup[platform.searchableName] = platform));
