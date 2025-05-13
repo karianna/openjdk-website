@@ -1,12 +1,13 @@
-const {findPlatform, detectEA, getOfficialName, getPlatformOrder,
-  loadAssetInfo, setRadioSelectors} = require('./common');
-const {jvmVariant, variant} = require('./common');
+import { findPlatform, detectEA, getOfficialName, getPlatformOrder, loadAssetInfo, setRadioSelectors, jvmVariant, variant } from './common';
+import moment from 'moment';
+import Handlebars from 'handlebars';
+import $ from 'jquery';
 
 const loading = document.getElementById('loading');
 const errorContainer = document.getElementById('error-container');
 
 // When archive page loads, run:
-module.exports.load = () => {
+export function load() {
   setRadioSelectors();
 
   loadAssetInfo(variant, jvmVariant, 'ga', undefined, undefined, undefined, 'adoptopenjdk', buildArchiveHTML, () => {
